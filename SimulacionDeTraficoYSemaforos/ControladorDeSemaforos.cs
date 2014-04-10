@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SimulacionDeTraficoYSemaforos
 {
-    class ControladorDeSemaforos
+    class ControladorDeSemaforos : Controlador
     {
         public ControladorDeSemaforos(Texture2D[] textura) :
             base(textura)
