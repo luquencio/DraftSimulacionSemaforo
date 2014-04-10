@@ -11,7 +11,7 @@ namespace SimulacionDeTraficoYSemaforos
     public class Sprite
     {
         private Texture2D textura;
-        private Vector2 posicion;
+        protected Vector2 posicion;
 
         public Sprite(Texture2D textura, Vector2 posicion)
         {
@@ -26,7 +26,7 @@ namespace SimulacionDeTraficoYSemaforos
             spriteBatch.Draw(textura, posicion, Color.White);
         }
 
-        public virtual void Update()
+        public virtual void Update(GameTime gameTime)
         {
 
         }

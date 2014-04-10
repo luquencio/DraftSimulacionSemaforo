@@ -18,6 +18,11 @@ namespace SimulacionDeTraficoYSemaforos
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D carrito;
+        Texture2D fondo;
+        private Vehiculo accord;
+        private Vehiculo porshe;
+        int contador = 0;
 
         public Game1()
             : base()
@@ -49,6 +54,16 @@ namespace SimulacionDeTraficoYSemaforos
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            carrito = Content.Load<Texture2D>("CamionetaPeq");
+            fondo = Content.Load<Texture2D>("FondoCalle");
+            
+
+            var gameBoundaries = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
+            accord = new Vehiculo(Content.Load<Texture2D>("CarroAzulPeq"), new Vector2(653, 508));
+            porshe = new Vehiculo(Content.Load<Texture2D>("CarroRojoPeq"), new Vector2(671,508));
+
+            
+
         }
 
         /// <summary>
@@ -69,8 +84,29 @@ namespace SimulacionDeTraficoYSemaforos
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            Random rand = new Random();
+
+            float speed1 = -0.5f;
+            float speed2 = -0.5f;
+
+            if (contador == 100)
+            {
+                speed1 = -(float)rand.Next(2);
+                speed2 = -(float)rand.Next(2);
+                contador = 0;
+            }
+
+            contador++;
+            
+
+
 
             // TODO: Add your update logic here
+            accord.Update(gameTime, speed1);
+
+
+            porshe.Update(gameTime,speed2 );
+
 
             base.Update(gameTime);
         }
@@ -84,6 +120,15 @@ namespace SimulacionDeTraficoYSemaforos
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+
+            spriteBatch.Begin();
+
+
+            spriteBatch.Draw(fondo, Vector2.Zero, Color.White);
+            accord.Draw(spriteBatch);
+            porshe.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

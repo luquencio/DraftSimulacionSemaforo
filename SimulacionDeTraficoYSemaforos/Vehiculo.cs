@@ -15,12 +15,25 @@ namespace SimulacionDeTraficoYSemaforos
         public Vehiculo(Texture2D textura, Vector2 posicion) :
             base(textura, posicion)
         {
-
+            velocity = new Vector2(0, 0);
         }
 
-        public override void Update()
+        public override void Update(GameTime gametime)
         {
-            base.Update();
+            velocity.Y = -0.5f;
+
+            posicion += velocity;
+
+            base.Update(gametime);
+        }
+
+        public void Update(GameTime gametime, float vel)
+        {
+            velocity.Y = vel;
+
+            posicion += velocity;
+
+            base.Update(gametime);
         }
 
         public void Crash()

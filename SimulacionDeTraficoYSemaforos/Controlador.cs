@@ -17,7 +17,7 @@ namespace SimulacionDeTraficoYSemaforos
             this.textura = textura;
         }
 
-        public virtual void Update()
+        public virtual void Update(GameTime gametime)
         {
 
         }
