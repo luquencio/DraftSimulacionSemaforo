@@ -10,16 +10,18 @@ namespace SimulacionDeTraficoYSemaforos
 {
     public class Controlador
     {
-        private Texture2D[] textura;
+        private Texture2D[] texturas;
 
-        public Controlador(Texture2D[] textura)
+        public Controlador(Texture2D[] texturas)
         {
-            this.textura = textura;
+            this.texturas = texturas;
         }
 
         public virtual void Update(GameTime gametime)
         {
 
         }
+
+        public Texture2D[] Texturas { get { return this.texturas; } }
     }
 }

@@ -18,13 +18,8 @@ namespace SimulacionDeTraficoYSemaforos
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D carrito;
-        Texture2D fondo;
-        private Vehiculo accord;
-        private Vehiculo porshe;
-        int contador = 0;
-        private Vector2 origin;
-        private float RotationAngle;
+        ControladorDeVehiculos controladorDeVehiculos;
+        private Texture2D fondo;
 
         public Game1()
             : base()
@@ -60,23 +55,18 @@ namespace SimulacionDeTraficoYSemaforos
                                              Content.Load<Texture2D>("CarroAzulPeq"),
                                              Content.Load<Texture2D>("CarroRojoPeq"),
                                              Content.Load<Texture2D>("CamionPeq"),
-                                             Content.Load<Texture2D>("PoliciaPeq") }; 
+                                             Content.Load<Texture2D>("PoliciaPeq") };
+
+            var gameBoundaries = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
+
+            fondo = Content.Load<Texture2D>("FondoCalle");
+
+
 
 
             // TODO: use this.Content to load your game content here
-            carrito = Content.Load<Texture2D>("CamionetaPeq");
-            fondo = Content.Load<Texture2D>("FondoCalle");
-            
 
-            var gameBoundaries = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
-            accord = new Vehiculo(Content.Load<Texture2D>("CarroAzulPeq"), new Vector2(653, 508), origin, 0f);
-            //porshe = new Vehiculo(Content.Load<Texture2D>("CarroRojoPeq"),new Vector2(653, 508), origin, 0f);
-            origin.X = Content.Load<Texture2D>("CarroAzul").Width / 2;
-            origin.Y = Content.Load<Texture2D>("CarroAzul").Height / 2;
-            float circle = MathHelper.Pi * 2;
-            RotationAngle = RotationAngle % circle;
-
-            
+            controladorDeVehiculos = new ControladorDeVehiculos(texturasDeCarros);                      
 
         }
 
@@ -98,29 +88,10 @@ namespace SimulacionDeTraficoYSemaforos
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            Random rand = new Random();
-
-            float speed1 = -0.5f;
-            float speed2 = -0.5f;
-
-            if (contador == 100)
-            {
-                speed1 = -(float)rand.Next(2);
-                speed2 = -(float)rand.Next(2);
-                contador = 0;
-            }
-
-            contador++;
             
-
-
-
             // TODO: Add your update logic here
-            accord.Update(gameTime, speed1);
 
-
-            //porshe.Update(gameTime,speed2 );
-
+            controladorDeVehiculos.Update(gameTime);            
 
             base.Update(gameTime);
         }
@@ -137,13 +108,10 @@ namespace SimulacionDeTraficoYSemaforos
 
             spriteBatch.Begin();
 
-
             spriteBatch.Draw(fondo, Vector2.Zero, Color.White);
-            accord.Draw(spriteBatch);
-            //porshe.Draw(spriteBatch);
 
-            spriteBatch.Draw(Content.Load<Texture2D>("CarroAzul"), new Vector2(385, 50), null, Color.White, MathHelper.TwoPi,
-            origin, 1.0f, SpriteEffects.None, 0f);
+            controladorDeVehiculos.Draw(spriteBatch);
+            
 
             spriteBatch.End();
 

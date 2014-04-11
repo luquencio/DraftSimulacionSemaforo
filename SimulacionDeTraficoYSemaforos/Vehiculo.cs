@@ -10,38 +10,27 @@ namespace SimulacionDeTraficoYSemaforos
 {
     public class Vehiculo : Sprite
     {
-        private Vector2 velocity;
-        private Vector2 origin;
-        private float AnguloDeRotacion;
+        private Vector2 velocidad;
+        private Vector2 centroDeRotacion;
+        private float anguloDeRotacion;
 
-        public Vehiculo(Texture2D textura, Vector2 posicion, Vector2 origin, float AnguloDeRotacion) :
+        public Vehiculo(Texture2D textura, Vector2 posicion, Vector2 centroDeRotacion, float anguloDeRotacion, Vector2 velocidad) :
             base(textura, posicion)
         {
-            velocity = new Vector2(0, 0);
-            this.origin = origin;
-            this.AnguloDeRotacion = AnguloDeRotacion;
+            this.velocidad = velocidad;
+            this.centroDeRotacion = centroDeRotacion;
+            this.anguloDeRotacion = anguloDeRotacion;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(textura, posicion, null, Color.White, AnguloDeRotacion,
-            origin, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(textura, posicion, null, Color.White, anguloDeRotacion,
+            centroDeRotacion, 1.0f, SpriteEffects.None, 0f);
         }
 
         public override void Update(GameTime gametime)
         {
-            velocity.Y = -0.5f;
-
-            posicion += velocity;
-
-            base.Update(gametime);
-        }
-
-        public void Update(GameTime gametime, float vel)
-        {
-            velocity.Y = vel;
-
-            posicion += velocity;
+            posicion += velocidad;
 
             base.Update(gametime);
         }
