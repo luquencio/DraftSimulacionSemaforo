@@ -28,35 +28,7 @@ namespace SimulacionDeTraficoYSemaforos
         {
             this.texturas = texturas;
             this.estado = estado;
-        }
-
-        //public void CambiarEstado() 
-        //{
-        //    if (this.estado == Estado.Verde)
-        //    {
-        //        CambiarARojo();
-        //        //Thread cambiadorDeSemaforo = new Thread(CambiarARojo);
-        //        //cambiadorDeSemaforo.Start();
-        //        //cambiadorDeSemaforo.Join();
-        //    }
-
-        //    else
-        //    {
-        //        estado = Estado.Verde;
-        //        textura = texturas[2];
-        //    }
-
-        //    //LiberarBarrera();
-
-        //}
-
-        //private void CambiarARojo()
-        //{
-        //    estado = Estado.Rojo;
-        //    //this.textura = texturas[1];
-        //    //Thread.Sleep(3000);
-        //    this.textura = texturas[0];
-        //}
+        }      
 
 
         private Estado LeerEstado()
@@ -105,7 +77,7 @@ namespace SimulacionDeTraficoYSemaforos
 
         protected override Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
         {
-            return new Rectangle((int)posicion.X, (int)posicion.Y, Dimensiones.Width, Dimensiones.Height);
+            return new Rectangle((int)Dimensiones.X, (int)Dimensiones.Y, Dimensiones.Width, Dimensiones.Height);
         }
 
         

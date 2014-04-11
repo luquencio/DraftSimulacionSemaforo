@@ -44,12 +44,13 @@ namespace SimulacionDeTraficoYSemaforos
         {
             foreach (var semaforo in vectoresBarreraNorteSur)
             {
-                SemaforosNorteSur.Add(new Semaforo(Texturas[0], semaforo, Estado.Rojo , Texturas, new Rectangle(0,0,31,1)));
+                // arreglar esto
+                SemaforosNorteSur.Add(new Semaforo(Texturas[0], semaforo, Estado.Rojo, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y + 15, 31, 1)));
             }
 
             foreach (var semaforo in vectoresBarreraEsteOeste)
 	        {
-                SemaforosEsteOeste.Add(new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle(0, 0, 1, 31)));
+                SemaforosEsteOeste.Add(new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle((int)semaforo.X + 15, (int)semaforo.Y, 1, 31)));
 	        }
         }
 
@@ -64,7 +65,7 @@ namespace SimulacionDeTraficoYSemaforos
                 foreach (var semaforo in SemaforosNorteSur)
                 {
 
-                    if (semaforo.Estado == Estado.Rojo)
+                    if (semaforo.Estado == Estado.Verde)
                     {
                         semaforo.CambiarAAmarillo();
                     }
@@ -73,7 +74,7 @@ namespace SimulacionDeTraficoYSemaforos
 
                 foreach (var semaforo in SemaforosEsteOeste)
                 {
-                    if (semaforo.Estado == Estado.Rojo)
+                    if (semaforo.Estado == Estado.Verde)
                     {
                         semaforo.CambiarAAmarillo();
                     }
@@ -90,12 +91,12 @@ namespace SimulacionDeTraficoYSemaforos
 
                     if (semaforo.Estado == Estado.Amarillo)
                     {
-                        semaforo.CambiarAVerde();
+                        semaforo.CambiarARojo();
                     }
 
-                    else if (semaforo.Estado == Estado.Verde)
+                    else if (semaforo.Estado == Estado.Rojo)
                     {
-                        semaforo.CambiarARojo();
+                        semaforo.CambiarAVerde();
                     }
 
                 }
@@ -104,12 +105,12 @@ namespace SimulacionDeTraficoYSemaforos
                 {
                     if (semaforo.Estado == Estado.Amarillo)
                     {
-                        semaforo.CambiarAVerde();
+                        semaforo.CambiarARojo();
                     }
 
-                    else if (semaforo.Estado == Estado.Verde)
+                    else if (semaforo.Estado == Estado.Rojo)
                     {
-                        semaforo.CambiarARojo();
+                        semaforo.CambiarAVerde();
                     }
                 }
 
