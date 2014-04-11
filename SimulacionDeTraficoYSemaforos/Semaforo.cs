@@ -28,6 +28,18 @@ namespace SimulacionDeTraficoYSemaforos
 
         }
 
+        public void CambiarARojo()
+        {
+        }
+
+        public void CambiarAAmarillo()
+        { 
+        }
+
+        public void CambiarAVerde()
+        { 
+        }
+
         private Estado LeerEstado()
         {
             // parte critical

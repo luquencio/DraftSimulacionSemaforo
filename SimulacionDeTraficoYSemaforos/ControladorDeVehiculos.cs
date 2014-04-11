@@ -66,7 +66,7 @@ namespace SimulacionDeTraficoYSemaforos
 
             tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            if (tiempoDeGeneracionRandom > 5f)
+            if (tiempoDeGeneracionRandom > 2f)
             {
                 CrearVehiculos(rand.Next(vectoresOrigen.Length));
                 tiempoDeGeneracionRandom = 0;

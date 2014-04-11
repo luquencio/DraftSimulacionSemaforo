@@ -118,6 +118,7 @@ namespace SimulacionDeTraficoYSemaforos
             spriteBatch.Draw(fondo, Vector2.Zero, Color.White);
 
             controladorDeVehiculos.Draw(spriteBatch);
+            controladorDeSemaforos.Draw(spriteBatch);
             
 
             spriteBatch.End();
