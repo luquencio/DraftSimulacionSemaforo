@@ -12,11 +12,13 @@ namespace SimulacionDeTraficoYSemaforos
     {
         protected Texture2D textura;
         protected Vector2 posicion;
+        private Rectangle dimensiones;
 
-        public Sprite(Texture2D textura, Vector2 posicion)
+        public Sprite(Texture2D textura, Vector2 posicion, Rectangle dimensiones)
         {
             this.textura = textura;
             this.posicion = posicion;
+            this.dimensiones = dimensiones;
 
             // (Velocity*(float) gameTime.ElapsedGameTime.TotalSeconds);
         }
@@ -51,9 +53,10 @@ namespace SimulacionDeTraficoYSemaforos
         }
 
 
-        public Vector2 Posicion { get { return posicion; } }
-        public float Width { get { return textura.Width; } }
-        public float Height { get { return textura.Height; } }
+        protected Vector2 Posicion { get { return posicion; } }
+        protected float Width { get { return textura.Width; } }
+        protected float Height { get { return textura.Height; } }
+        protected Rectangle Dimensiones { get { return dimensiones; } }
 
         public Rectangle BoundingBox
         {

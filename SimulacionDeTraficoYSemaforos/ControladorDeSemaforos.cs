@@ -44,12 +44,12 @@ namespace SimulacionDeTraficoYSemaforos
         {
             foreach (var semaforo in vectoresBarreraNorteSur)
             {
-                SemaforosNorteSur.Add(new Semaforo(Texturas[0], semaforo, Estado.Rojo , Texturas));
+                SemaforosNorteSur.Add(new Semaforo(Texturas[0], semaforo, Estado.Rojo , Texturas, new Rectangle(0,0,31,1)));
             }
 
             foreach (var semaforo in vectoresBarreraEsteOeste)
 	        {
-                SemaforosEsteOeste.Add(new Semaforo(Texturas[2], semaforo,Estado.Verde , Texturas));
+                SemaforosEsteOeste.Add(new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle(0, 0, 1, 31)));
 	        }
         }
 
@@ -122,16 +122,33 @@ namespace SimulacionDeTraficoYSemaforos
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var semaforo in SemaforosNorteSur)
-            {
-                semaforo.Draw(spriteBatch);
-            }
-
-            foreach (var semaforo in SemaforosEsteOeste)
+            foreach (var semaforo in Semaforos)
             {
                 semaforo.Draw(spriteBatch);
             }
         }
+
+        public List<Semaforo> Semaforos { get { return GenerarListaDeSemaforos(); } }
+
+        private List<Semaforo> GenerarListaDeSemaforos()
+        {
+            List<Semaforo> semaforos = new List<Semaforo>();
+
+            foreach (var semaforo in SemaforosNorteSur)
+            {
+                semaforos.Add(semaforo);
+            }
+
+            foreach (var semaforo in SemaforosEsteOeste)
+            {
+                semaforos.Add(semaforo);
+            }
+
+            return semaforos;
+        }
+
+
+
 
     }
 }

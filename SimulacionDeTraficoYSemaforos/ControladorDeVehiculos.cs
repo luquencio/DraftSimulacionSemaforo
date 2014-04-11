@@ -34,10 +34,13 @@ namespace SimulacionDeTraficoYSemaforos
                                                                new Tuple<Vector2, Direccion> ( new Vector2(-45,266), Direccion.Este ),
                                                                new Tuple<Vector2, Direccion> ( new Vector2(-45,246), Direccion.Este )
                                                              };
+        private Texture2D[] texturasDeCarros;
+        private List<Semaforo> list;
 
-        public ControladorDeVehiculos(Texture2D[] texturas) :
+        public ControladorDeVehiculos(Texture2D[] texturas, List<Semaforo> list) :
             base(texturas)
         {
+            this.list = list;
         }
 
 
@@ -192,19 +195,29 @@ namespace SimulacionDeTraficoYSemaforos
         private void CheckInterseccion()
         {
 
-            //throw new NotImplementedException();
+            for (int i = 0; i < vehiculos.Count; i++)
+            {
+                foreach (var semaforo in list)
+                {
+                    if (vehiculos[i].BoundingBox.Intersects(semaforo.BoundingBox))
+                    {
+                        vehiculos[i].Detenerse();
+                    }                    
+                }                
+            }
+            
         }
 
         private void CheckCrash()
-        {
+        {          
+
             for (int i = 0; i < vehiculos.Count; i++)
             {
                 for (int j = 0; j < vehiculos.Count; j++)
                 {
-                    // en cuenta
-                    if ( (i != j) && vehiculos[i].BoundingBox.Intersects(vehiculos[j].BoundingBox))
+                    if ((i != j) && vehiculos[i].BoundingBox.Intersects(vehiculos[j].BoundingBox))
                     {
-                        vehiculos[i].Crash();
+                        vehiculos[i].Detenerse();
                     }
                 }
             }

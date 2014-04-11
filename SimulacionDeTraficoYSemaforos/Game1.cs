@@ -18,9 +18,8 @@ namespace SimulacionDeTraficoYSemaforos
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        ControladorDeVehiculos controladorDeVehiculos;
-        ControladorDeSemaforos controladorDeSemaforos;
         private Texture2D fondo;
+        ControlDeTransito controlDeTransito;
 
         public Game1()
             : base()
@@ -50,30 +49,14 @@ namespace SimulacionDeTraficoYSemaforos
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
 
-            Texture2D[] texturasDeCarros = { Content.Load<Texture2D>("CamionetaPeq"),
-                                             Content.Load<Texture2D>("CarroAzulPeq"),
-                                             Content.Load<Texture2D>("CarroRojoPeq"),
-                                             Content.Load<Texture2D>("CamionPeq"),
-                                             Content.Load<Texture2D>("PoliciaPeq") };
-
-            Texture2D[] texturasDeSemaforos = { Content.Load<Texture2D>("SemaforoRojoPeq"), 
-                                               Content.Load<Texture2D>("SemaforoAmarilloPeq"),
-                                               Content.Load<Texture2D>("SemaforoVerdePeq")
-                                             };
+            controlDeTransito = new ControlDeTransito(Content);
 
             var gameBoundaries = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
 
             fondo = Content.Load<Texture2D>("FondoCalle");
 
-
-
-
-            // TODO: use this.Content to load your game content here
-
-            controladorDeVehiculos = new ControladorDeVehiculos(texturasDeCarros);
-            controladorDeSemaforos = new ControladorDeSemaforos(texturasDeSemaforos);
+            // TODO: use this.Content to load your game content here           
 
         }
 
@@ -98,8 +81,7 @@ namespace SimulacionDeTraficoYSemaforos
             
             // TODO: Add your update logic here
 
-            controladorDeVehiculos.Update(gameTime);
-            controladorDeSemaforos.Update(gameTime);
+            controlDeTransito.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -117,8 +99,7 @@ namespace SimulacionDeTraficoYSemaforos
 
             spriteBatch.Draw(fondo, Vector2.Zero, Color.White);
 
-            controladorDeVehiculos.Draw(spriteBatch);
-            controladorDeSemaforos.Draw(spriteBatch);
+            controlDeTransito.Draw(spriteBatch);
             
 
             spriteBatch.End();

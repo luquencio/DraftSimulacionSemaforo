@@ -23,8 +23,8 @@ namespace SimulacionDeTraficoYSemaforos
         private Rectangle barrera;
         private Texture2D[] texturas;
 
-        public Semaforo(Texture2D textura, Vector2 posicion,Estado estado , Texture2D[] texturas)
-            : base(textura, posicion)
+        public Semaforo(Texture2D textura, Vector2 posicion,Estado estado , Texture2D[] texturas, Rectangle dimensiones)
+            : base(textura, posicion, dimensiones)
         {
             this.texturas = texturas;
             this.estado = estado;
@@ -101,6 +101,11 @@ namespace SimulacionDeTraficoYSemaforos
         {
             estado = Estado.Rojo;
             textura = texturas[0];
+        }
+
+        protected override Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
+        {
+            return new Rectangle((int)posicion.X, (int)posicion.Y, Dimensiones.Width, Dimensiones.Height);
         }
 
         

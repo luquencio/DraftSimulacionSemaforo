@@ -38,6 +38,7 @@
     <Compile Include="Controlador.cs" />
     <Compile Include="ControladorDeSemaforos.cs" />
     <Compile Include="ControladorDeVehiculos.cs" />
+    <Compile Include="ControlDeTransito.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
