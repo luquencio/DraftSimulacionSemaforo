@@ -102,5 +102,7 @@ namespace SimulacionDeTraficoYSemaforos
             estado = Estado.Rojo;
             textura = texturas[0];
         }
+
+        
     }
 }

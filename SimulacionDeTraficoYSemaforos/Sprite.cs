@@ -45,7 +45,7 @@ namespace SimulacionDeTraficoYSemaforos
 //width = x2-x1;
 //height = y2-y1;
 
-        private Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
+        protected virtual Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
         {
             return new Rectangle((int)posicion.X, (int)posicion.Y, (int)Width, (int)Height);
         }

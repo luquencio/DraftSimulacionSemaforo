@@ -93,10 +93,11 @@ namespace SimulacionDeTraficoYSemaforos
                 }
 
                 posicionesGeneradas.Add(posicionRandom);
+                Direccion direccion = vectoresOrigen[posicionRandom].Item2;
 
                 vehiculos.Add(new Vehiculo(Texturas[texturaRandom], vectoresOrigen[posicionRandom].Item1,
-                              DeterminarCentroDeRotacion(texturaRandom), DeterminarAnguloDeRotacion(vectoresOrigen[posicionRandom].Item2),
-                              DeterminarDireccionDeVelocidad(vectoresOrigen[posicionRandom].Item2)));
+                              DeterminarCentroDeRotacion(texturaRandom), DeterminarAnguloDeRotacion(direccion),
+                              DeterminarDireccionDeVelocidad(direccion),Dimensiones(direccion)));
                 
             }
         }
@@ -130,6 +131,25 @@ namespace SimulacionDeTraficoYSemaforos
             return velocidad;
         }
 
+        private Rectangle Dimensiones(Direccion direccion) 
+        {
+
+            Rectangle dimensiones = new Rectangle(0, 0, 0, 0);
+
+            if (direccion == Direccion.Norte || direccion == Direccion.Sur)
+            {
+                dimensiones.Width = 11;
+                dimensiones.Height = 26;
+            }
+            else
+            {
+                dimensiones.Width = 26;
+                dimensiones.Height = 11;
+            }
+
+            return dimensiones;
+        }
+            
         private float DeterminarAnguloDeRotacion(Direccion direccion)
         {
             float angulo = 0f;

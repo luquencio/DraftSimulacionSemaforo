@@ -12,14 +12,16 @@ namespace SimulacionDeTraficoYSemaforos
     {
         private Vector2 velocidad;
         private Vector2 centroDeRotacion;
+        private Rectangle dimensiones;
         private float anguloDeRotacion;
 
-        public Vehiculo(Texture2D textura, Vector2 posicion, Vector2 centroDeRotacion, float anguloDeRotacion, Vector2 velocidad) :
+        public Vehiculo(Texture2D textura, Vector2 posicion, Vector2 centroDeRotacion, float anguloDeRotacion, Vector2 velocidad, Rectangle dimensiones) :
             base(textura, posicion)
         {
             this.velocidad = velocidad;
             this.centroDeRotacion = centroDeRotacion;
             this.anguloDeRotacion = anguloDeRotacion;
+            this.dimensiones = dimensiones;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -39,6 +41,11 @@ namespace SimulacionDeTraficoYSemaforos
         {
             velocidad.X = 0f;
             velocidad.Y = 0f;
+        }
+
+        protected override Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
+        {
+            return new Rectangle((int)posicion.X, (int)posicion.Y, dimensiones.Width, dimensiones.Height);
         }
         
     }
