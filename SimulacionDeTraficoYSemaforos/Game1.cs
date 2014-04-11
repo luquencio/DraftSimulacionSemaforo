@@ -19,6 +19,7 @@ namespace SimulacionDeTraficoYSemaforos
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ControladorDeVehiculos controladorDeVehiculos;
+        ControladorDeSemaforos controladorDeSemaforos;
         private Texture2D fondo;
 
         public Game1()
@@ -57,6 +58,11 @@ namespace SimulacionDeTraficoYSemaforos
                                              Content.Load<Texture2D>("CamionPeq"),
                                              Content.Load<Texture2D>("PoliciaPeq") };
 
+            Texture2D[] texturasDeSemaforos = { Content.Load<Texture2D>("SemaforoRojoPeq"), 
+                                               Content.Load<Texture2D>("SemaforoAmarilloPeq"),
+                                               Content.Load<Texture2D>("SemaforoVerdePeq")
+                                             };
+
             var gameBoundaries = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
 
             fondo = Content.Load<Texture2D>("FondoCalle");
@@ -66,7 +72,8 @@ namespace SimulacionDeTraficoYSemaforos
 
             // TODO: use this.Content to load your game content here
 
-            controladorDeVehiculos = new ControladorDeVehiculos(texturasDeCarros);                      
+            controladorDeVehiculos = new ControladorDeVehiculos(texturasDeCarros);
+            controladorDeSemaforos = new ControladorDeSemaforos(texturasDeSemaforos);
 
         }
 

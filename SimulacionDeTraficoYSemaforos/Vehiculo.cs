@@ -37,8 +37,8 @@ namespace SimulacionDeTraficoYSemaforos
 
         public void Crash()
         {
-            throw new NotImplementedException();
-
+            velocidad.X = 0f;
+            velocidad.Y = 0f;
         }
         
     }

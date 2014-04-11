@@ -26,7 +26,6 @@ namespace SimulacionDeTraficoYSemaforos
         public ControladorDeSemaforos(Texture2D[] textura) :
             base(textura)
         {
-
         }
 
         private void CrearSemaforos()

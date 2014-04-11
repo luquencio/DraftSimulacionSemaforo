@@ -66,11 +66,13 @@ namespace SimulacionDeTraficoYSemaforos
 
             tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            if (tiempoDeGeneracionRandom > 5.0f)
+            if (tiempoDeGeneracionRandom > 5f)
             {
                 CrearVehiculos(rand.Next(vectoresOrigen.Length));
                 tiempoDeGeneracionRandom = 0;
-            }            
+            }
+
+            CheckCollisions();
 
             base.Update(gametime);
         }
@@ -177,28 +179,15 @@ namespace SimulacionDeTraficoYSemaforos
         {
             for (int i = 0; i < vehiculos.Count; i++)
             {
-                for (int j = i + 1; j < vehiculos.Count; j++)
+                for (int j = 0; j < vehiculos.Count; j++)
                 {
                     // en cuenta
-                    if (vehiculos[i].BoundingBox.Intersects(vehiculos[j].BoundingBox))
+                    if ( (i != j) && vehiculos[i].BoundingBox.Intersects(vehiculos[j].BoundingBox))
                     {
                         vehiculos[i].Crash();
                     }
-
                 }
             }
-
-            //foreach (var vehiculoA in vehiculos)
-            //{
-            //    foreach (var vehiculoB in vehiculos)
-            //    {
-            //        if (vehiculoA.BoundingBox.Intersects(vehiculoB.BoundingBox))
-            //        {
-            //            vehiculoA.Crash();
-            //        }
-            //    }
-
-            //}
         }
 
         private float RotarAlNorte { get { return MathHelper.TwoPi; } }
@@ -206,7 +195,7 @@ namespace SimulacionDeTraficoYSemaforos
         private float RotarAlEste { get { return MathHelper.PiOver2; } }
         private float RotarAlOeste { get { return (MathHelper.Pi + MathHelper.PiOver2); } }
 
-        internal void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var vehiculo in vehiculos)
             {
