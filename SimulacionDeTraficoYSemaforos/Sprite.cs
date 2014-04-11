@@ -37,9 +37,17 @@ namespace SimulacionDeTraficoYSemaforos
         //    return !movementBounds.Contains(boundingBox);
         //}
 
-        private Rectangle CreateBoundingBoxFromPosition(Vector2 position)
+//        x1 =(width * math.abs(math.cos(angle) + height * math.abs(math.sin(angle))*-.5
+//x2 =(width * math.abs(math.cos(angle) + height * math.abs(math.sin(angle))*.5
+//y1 =(width * math.abs(math.sin(angle) + height * math.abs(math.cos(angle))*-.5
+//y2 =(width * math.abs(math.sin(angle) + height * math.abs(math.cos(angle))*.5
+
+//width = x2-x1;
+//height = y2-y1;
+
+        private Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
         {
-            return new Rectangle((int)position.X, (int)position.Y, (int)Width, (int)Height);
+            return new Rectangle((int)posicion.X, (int)posicion.Y, (int)Width, (int)Height);
         }
 
 

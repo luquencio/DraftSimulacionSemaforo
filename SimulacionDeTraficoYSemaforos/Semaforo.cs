@@ -30,33 +30,33 @@ namespace SimulacionDeTraficoYSemaforos
             this.estado = estado;
         }
 
-        public void CambiarEstado() 
-        {
-            if (this.estado == Estado.Verde)
-            {
-                CambiarARojo();
-                //Thread cambiadorDeSemaforo = new Thread(CambiarARojo);
-                //cambiadorDeSemaforo.Start();
-                //cambiadorDeSemaforo.Join();
-            }
+        //public void CambiarEstado() 
+        //{
+        //    if (this.estado == Estado.Verde)
+        //    {
+        //        CambiarARojo();
+        //        //Thread cambiadorDeSemaforo = new Thread(CambiarARojo);
+        //        //cambiadorDeSemaforo.Start();
+        //        //cambiadorDeSemaforo.Join();
+        //    }
 
-            else
-            {
-                estado = Estado.Verde;
-                textura = texturas[2];
-            }
+        //    else
+        //    {
+        //        estado = Estado.Verde;
+        //        textura = texturas[2];
+        //    }
 
-            //LiberarBarrera();
+        //    //LiberarBarrera();
 
-        }
+        //}
 
-        private void CambiarARojo()
-        {
-            estado = Estado.Rojo;
-            //this.textura = texturas[1];
-            //Thread.Sleep(3000);
-            this.textura = texturas[0];
-        }
+        //private void CambiarARojo()
+        //{
+        //    estado = Estado.Rojo;
+        //    //this.textura = texturas[1];
+        //    //Thread.Sleep(3000);
+        //    this.textura = texturas[0];
+        //}
 
 
         private Estado LeerEstado()
@@ -82,5 +82,25 @@ namespace SimulacionDeTraficoYSemaforos
             
         }
 
+        public Estado Estado { get { return estado; } }
+
+
+        internal void CambiarAVerde()
+        {
+            estado = Estado.Verde;
+            textura = texturas[2];
+        }
+
+        internal void CambiarAAmarillo()
+        {
+            estado = Estado.Amarillo;
+            textura = texturas[1];
+        }
+
+        internal void CambiarARojo()
+        {
+            estado = Estado.Rojo;
+            textura = texturas[0];
+        }
     }
 }

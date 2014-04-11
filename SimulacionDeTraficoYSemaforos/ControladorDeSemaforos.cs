@@ -13,6 +13,7 @@ namespace SimulacionDeTraficoYSemaforos
         List<Semaforo> SemaforosNorteSur = new List<Semaforo>();
         List<Semaforo> SemaforosEsteOeste = new List<Semaforo>();
         private float tiempoDeGeneracionRandom = 0f;
+        bool cambieEstado;
 
         private Vector2[] vectoresBarreraNorteSur = { new Vector2(115, 193),
                                                       new Vector2(378,193),
@@ -56,19 +57,63 @@ namespace SimulacionDeTraficoYSemaforos
         {
             tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            if (tiempoDeGeneracionRandom > 2f)
+            
+
+            if (tiempoDeGeneracionRandom > 4f && cambieEstado == false)
             {
                 foreach (var semaforo in SemaforosNorteSur)
                 {
-                    semaforo.CambiarEstado();
+
+                    if (semaforo.Estado == Estado.Rojo)
+                    {
+                        semaforo.CambiarAAmarillo();
+                    }
 
                 }
 
                 foreach (var semaforo in SemaforosEsteOeste)
                 {
-                    semaforo.CambiarEstado();
+                    if (semaforo.Estado == Estado.Rojo)
+                    {
+                        semaforo.CambiarAAmarillo();
+                    }
                 }
 
+                cambieEstado = true;
+            }
+
+
+            if (tiempoDeGeneracionRandom > 7f)
+            {
+                foreach (var semaforo in SemaforosNorteSur)
+                {
+
+                    if (semaforo.Estado == Estado.Amarillo)
+                    {
+                        semaforo.CambiarAVerde();
+                    }
+
+                    else if (semaforo.Estado == Estado.Verde)
+                    {
+                        semaforo.CambiarARojo();
+                    }
+
+                }
+
+                foreach (var semaforo in SemaforosEsteOeste)
+                {
+                    if (semaforo.Estado == Estado.Amarillo)
+                    {
+                        semaforo.CambiarAVerde();
+                    }
+
+                    else if (semaforo.Estado == Estado.Verde)
+                    {
+                        semaforo.CambiarARojo();
+                    }
+                }
+
+                cambieEstado = false;
                 tiempoDeGeneracionRandom = 0;
             }
 
