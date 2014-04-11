@@ -22,8 +22,6 @@ namespace SimulacionDeTraficoYSemaforos
         Random rand = new Random();
         private const float VELOCIDAD = 0.5f;
         private float tiempoDeGeneracionRandom = 0f;
-        
-
 
         private Tuple<Vector2, Direccion>[] vectoresOrigen = { new Tuple<Vector2, Direccion> ( new Vector2(121,-40), Direccion.Sur ),
                                                                new Tuple<Vector2, Direccion> ( new Vector2(140,-40), Direccion.Sur ),
@@ -70,7 +68,7 @@ namespace SimulacionDeTraficoYSemaforos
 
             if (tiempoDeGeneracionRandom > 5.0f)
             {
-                CrearVehiculos(rand.Next(10));
+                CrearVehiculos(rand.Next(vectoresOrigen.Length));
                 tiempoDeGeneracionRandom = 0;
             }            
 
@@ -83,8 +81,8 @@ namespace SimulacionDeTraficoYSemaforos
 
             for (int vehiculo = 0; vehiculo < cantidad; vehiculo++)
             {
-                int texturaRandom = rand.Next(5);
-                int posicionRandom = rand.Next(10);
+                int texturaRandom = rand.Next(TexturasDisponibles);
+                int posicionRandom = rand.Next(vectoresOrigen.Length);
 
                 if (posicionesGeneradas.Contains(posicionRandom))
                 {

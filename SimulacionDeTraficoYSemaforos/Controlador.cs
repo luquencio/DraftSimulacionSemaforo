@@ -23,5 +23,6 @@ namespace SimulacionDeTraficoYSemaforos
         }
 
         public Texture2D[] Texturas { get { return this.texturas; } }
+        public int TexturasDisponibles { get { return this.texturas.Count(); } }
     }
 }
