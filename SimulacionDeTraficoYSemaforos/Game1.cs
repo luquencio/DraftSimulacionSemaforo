@@ -23,6 +23,8 @@ namespace SimulacionDeTraficoYSemaforos
         private Vehiculo accord;
         private Vehiculo porshe;
         int contador = 0;
+        private Vector2 origin;
+        private float RotationAngle;
 
         public Game1()
             : base()
@@ -52,6 +54,14 @@ namespace SimulacionDeTraficoYSemaforos
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+
+            Texture2D[] texturasDeCarros = { Content.Load<Texture2D>("CamionetaPeq"),
+                                             Content.Load<Texture2D>("CarroAzulPeq"),
+                                             Content.Load<Texture2D>("CarroRojoPeq"),
+                                             Content.Load<Texture2D>("CamionPeq"),
+                                             Content.Load<Texture2D>("PoliciaPeq") }; 
+
 
             // TODO: use this.Content to load your game content here
             carrito = Content.Load<Texture2D>("CamionetaPeq");
@@ -59,8 +69,12 @@ namespace SimulacionDeTraficoYSemaforos
             
 
             var gameBoundaries = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
-            accord = new Vehiculo(Content.Load<Texture2D>("CarroAzulPeq"), new Vector2(653, 508));
-            porshe = new Vehiculo(Content.Load<Texture2D>("CarroRojoPeq"), new Vector2(671,508));
+            accord = new Vehiculo(Content.Load<Texture2D>("CarroAzulPeq"), new Vector2(653, 508), origin, 0f);
+            //porshe = new Vehiculo(Content.Load<Texture2D>("CarroRojoPeq"),new Vector2(653, 508), origin, 0f);
+            origin.X = Content.Load<Texture2D>("CarroAzul").Width / 2;
+            origin.Y = Content.Load<Texture2D>("CarroAzul").Height / 2;
+            float circle = MathHelper.Pi * 2;
+            RotationAngle = RotationAngle % circle;
 
             
 
@@ -105,7 +119,7 @@ namespace SimulacionDeTraficoYSemaforos
             accord.Update(gameTime, speed1);
 
 
-            porshe.Update(gameTime,speed2 );
+            //porshe.Update(gameTime,speed2 );
 
 
             base.Update(gameTime);
@@ -126,7 +140,10 @@ namespace SimulacionDeTraficoYSemaforos
 
             spriteBatch.Draw(fondo, Vector2.Zero, Color.White);
             accord.Draw(spriteBatch);
-            porshe.Draw(spriteBatch);
+            //porshe.Draw(spriteBatch);
+
+            spriteBatch.Draw(Content.Load<Texture2D>("CarroAzul"), new Vector2(385, 50), null, Color.White, MathHelper.TwoPi,
+            origin, 1.0f, SpriteEffects.None, 0f);
 
             spriteBatch.End();
 

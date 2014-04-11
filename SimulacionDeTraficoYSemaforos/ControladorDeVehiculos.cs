@@ -8,26 +8,35 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SimulacionDeTraficoYSemaforos
 {
+    public enum Direccion
+	{
+	    Norte,
+        Sur,
+        Este,
+        Oeste
+	}
 
     public class ControladorDeVehiculos : Controlador
     {
         private List<Vehiculo> vehiculos = new List<Vehiculo>();
+        Random rand;
 
-        private Vector2[] vectoresOrigen = { new Vector2(385,-50),
-                                             new Vector2(654,-50),
-                                             new Vector2(672,-50),
-                                             new Vector2(829,197),
-                                             new Vector2(829,217),
-                                             new Vector2(671,508),
-                                             new Vector2(653,508),
-                                             new Vector2(402,508),
-                                             new Vector2(-50,261),
-                                             new Vector2(-50,261),
-                                           };
+        private Tuple<Vector2, Direccion>[] vectoresOrigen = { new Tuple<Vector2, Direccion> ( new Vector2(390,-40), Direccion.Sur ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(659,-40), Direccion.Sur ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(677,-40), Direccion.Sur),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(834,187), Direccion.Oeste ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(834,216), Direccion.Oeste ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(676,498), Direccion.Norte ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(658,498), Direccion.Norte ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(407,498), Direccion.Norte ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(-45,271), Direccion.Este ),
+                                                               new Tuple<Vector2, Direccion> ( new Vector2(-45,271), Direccion.Este )
+                                                             };
 
         public ControladorDeVehiculos(Texture2D[] textura) :
             base(textura)
         {
+            Random rand = new Random();
 
         }
 
@@ -54,12 +63,14 @@ namespace SimulacionDeTraficoYSemaforos
                 //}
             }
 
+            CrearVehiculos(rand.Next(10));
+
             base.Update(gametime);
         }
 
-        private void CrearVehiculos()
+        private void CrearVehiculos(int cantidad)
         {
- 
+            
         }
 
         private void CheckCollisions()
@@ -88,6 +99,7 @@ namespace SimulacionDeTraficoYSemaforos
 
                 }
             }
+
             //foreach (var vehiculoA in vehiculos)
             //{
             //    foreach (var vehiculoB in vehiculos)
@@ -100,5 +112,10 @@ namespace SimulacionDeTraficoYSemaforos
 
             //}
         }
+
+        private float RotarAlNorte { get { return MathHelper.TwoPi; } }
+        private float RotarAlSur { get { return MathHelper.Pi; } }
+        private float RotarAlEste { get { return MathHelper.PiOver2; } }
+        private float RotarAlOeste { get { return (MathHelper.Pi + MathHelper.PiOver2); } }
     }
 }

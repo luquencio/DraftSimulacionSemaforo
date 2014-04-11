@@ -10,7 +10,7 @@ namespace SimulacionDeTraficoYSemaforos
 {
     public class Sprite
     {
-        private Texture2D textura;
+        protected Texture2D textura;
         protected Vector2 posicion;
 
         public Sprite(Texture2D textura, Vector2 posicion)
@@ -21,7 +21,7 @@ namespace SimulacionDeTraficoYSemaforos
             // (Velocity*(float) gameTime.ElapsedGameTime.TotalSeconds);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(textura, posicion, Color.White);
         }
@@ -52,6 +52,6 @@ namespace SimulacionDeTraficoYSemaforos
             get { return CreateBoundingBoxFromPosition(posicion); }
         }
 
-        protected Texture2D Textura { set { textura = value; } }
+        //protected Texture2D Textura { set { textura = value; } }
     }
 }
