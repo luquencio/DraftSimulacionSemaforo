@@ -12,6 +12,7 @@ namespace SimulacionDeTraficoYSemaforos
     {
         List<Semaforo> SemaforosNorteSur = new List<Semaforo>();
         List<Semaforo> SemaforosEsteOeste = new List<Semaforo>();
+        private float tiempoDeGeneracionRandom = 0f;
 
         private Vector2[] vectoresBarreraNorteSur = { new Vector2(115, 193),
                                                       new Vector2(378,193),
@@ -40,19 +41,36 @@ namespace SimulacionDeTraficoYSemaforos
 
         private void CrearSemaforos()
         {
-            foreach (Vector2 semaforo in vectoresBarreraNorteSur)
+            foreach (var semaforo in vectoresBarreraNorteSur)
             {
-                SemaforosNorteSur.Add(new Semaforo(Texturas[0], semaforo));
+                SemaforosNorteSur.Add(new Semaforo(Texturas[0], semaforo, Estado.Rojo , Texturas));
             }
 
             foreach (var semaforo in vectoresBarreraEsteOeste)
 	        {
-                SemaforosEsteOeste.Add(new Semaforo(Texturas[2], semaforo));
+                SemaforosEsteOeste.Add(new Semaforo(Texturas[2], semaforo,Estado.Verde , Texturas));
 	        }
         }
 
         public override void Update(GameTime gametime)
         {
+            tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
+
+            if (tiempoDeGeneracionRandom > 2f)
+            {
+                foreach (var semaforo in SemaforosNorteSur)
+                {
+                    semaforo.CambiarEstado();
+
+                }
+
+                foreach (var semaforo in SemaforosEsteOeste)
+                {
+                    semaforo.CambiarEstado();
+                }
+
+                tiempoDeGeneracionRandom = 0;
+            }
 
             base.Update(gametime);
         }
@@ -69,5 +87,6 @@ namespace SimulacionDeTraficoYSemaforos
                 semaforo.Draw(spriteBatch);
             }
         }
+
     }
 }

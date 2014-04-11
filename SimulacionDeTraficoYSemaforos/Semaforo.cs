@@ -21,24 +21,43 @@ namespace SimulacionDeTraficoYSemaforos
         private Estado estado;
         private object _lock = new object();
         private Rectangle barrera;
+        private Texture2D[] texturas;
 
-        public Semaforo(Texture2D textura, Vector2 posicion)
+        public Semaforo(Texture2D textura, Vector2 posicion,Estado estado , Texture2D[] texturas)
             : base(textura, posicion)
         {
-
+            this.texturas = texturas;
+            this.estado = estado;
         }
 
-        public void CambiarARojo()
+        public void CambiarEstado() 
         {
+            if (this.estado == Estado.Verde)
+            {
+                CambiarARojo();
+                //Thread cambiadorDeSemaforo = new Thread(CambiarARojo);
+                //cambiadorDeSemaforo.Start();
+                //cambiadorDeSemaforo.Join();
+            }
+
+            else
+            {
+                estado = Estado.Verde;
+                textura = texturas[2];
+            }
+
+            //LiberarBarrera();
+
         }
 
-        public void CambiarAAmarillo()
-        { 
+        private void CambiarARojo()
+        {
+            estado = Estado.Rojo;
+            //this.textura = texturas[1];
+            //Thread.Sleep(3000);
+            this.textura = texturas[0];
         }
 
-        public void CambiarAVerde()
-        { 
-        }
 
         private Estado LeerEstado()
         {
@@ -60,6 +79,7 @@ namespace SimulacionDeTraficoYSemaforos
             {
                 Monitor.PulseAll(_lock);
             }
+            
         }
 
     }

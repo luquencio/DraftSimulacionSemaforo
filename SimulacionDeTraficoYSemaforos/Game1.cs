@@ -98,8 +98,8 @@ namespace SimulacionDeTraficoYSemaforos
             
             // TODO: Add your update logic here
 
-            controladorDeVehiculos.Update(gameTime);            
-
+            controladorDeVehiculos.Update(gameTime);
+            controladorDeSemaforos.Update(gameTime);
             base.Update(gameTime);
         }
 
