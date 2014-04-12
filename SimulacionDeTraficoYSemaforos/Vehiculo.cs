@@ -17,6 +17,7 @@ namespace SimulacionDeTraficoYSemaforos
         Direccion direccion;
         Rectangle dimensiones;
         Semaforo semaforo;
+        bool estoyDisponible = true;
 
         public Vehiculo(Texture2D textura, Vector2 posicion, Direccion direccion, Semaforo semaforo) :
             base(textura, posicion)
@@ -28,6 +29,7 @@ namespace SimulacionDeTraficoYSemaforos
             this.anguloDeRotacion = DeterminarAnguloDeRotacion(direccion);
             this.dimensiones = Dimensiones(direccion);
             this.semaforo = semaforo;
+            
             // DeterminarCentroDeRotacion(texturaRandom), DeterminarAnguloDeRotacion(direccion),
             //                  DeterminarDireccionDeVelocidad(direccion)
             // Dimensiones(direccion)
@@ -125,10 +127,16 @@ namespace SimulacionDeTraficoYSemaforos
         {
             posicion += velocidad;
 
+            //if (estoyDisponible == true)
+            //{
+                
+            //}
+
             
 
             base.Update(gametime);
         }
+
 
         public void Detenerse()
         {
@@ -139,7 +147,7 @@ namespace SimulacionDeTraficoYSemaforos
 
         protected override Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
         {
-            return new Rectangle((int)posicion.X, (int)posicion.Y, dimensiones.Width, dimensiones.Height);
+            return new Rectangle((int)posicion.X - 7, (int)posicion.Y - 7, dimensiones.Width, dimensiones.Height);
         }
 
         public Direccion Direccion { get { return direccion; } }
@@ -154,9 +162,15 @@ namespace SimulacionDeTraficoYSemaforos
             {
 
                 velocidad = DeterminarDireccionDeVelocidad(direccion);
-            }          
+            }        
         }
 
-        
+        public Vector2 Velocity { get { return velocidad; } }
+
+
+        internal void Moverse()
+        {
+            velocidad = DeterminarDireccionDeVelocidad(direccion);
+        }
     }
 }

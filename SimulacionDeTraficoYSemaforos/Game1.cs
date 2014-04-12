@@ -50,7 +50,7 @@ namespace SimulacionDeTraficoYSemaforos
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            controlDeTransito = new ControlDeTransito(Content);
+            controlDeTransito = new ControlDeTransito(Content, graphics.GraphicsDevice.Viewport.Bounds);
 
             var gameBoundaries = new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height);
 
@@ -100,8 +100,8 @@ namespace SimulacionDeTraficoYSemaforos
             spriteBatch.Draw(fondo, Vector2.Zero, Color.White);
 
 
-            controlDeTransito.Draw(spriteBatch);
-            //controlDeTransito.Draw(spriteBatch, this);
+            //controlDeTransito.Draw(spriteBatch);
+            controlDeTransito.Draw(spriteBatch, this);
             //DrawRectangle(new Rectangle(115, 193, 10, 3), Color.Fuchsia);
             
 

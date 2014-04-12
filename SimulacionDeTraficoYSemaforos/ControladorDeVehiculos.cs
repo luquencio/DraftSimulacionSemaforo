@@ -22,6 +22,7 @@ namespace SimulacionDeTraficoYSemaforos
         private List<Vehiculo> vehiculos = new List<Vehiculo>();
         Random rand = new Random();
         private float tiempoDeGeneracionRandom = 0f;
+        Rectangle limites;
 
         private Tuple<Vector2, Direccion>[] vectoresOrigen = { new Tuple<Vector2, Direccion> ( new Vector2(121,-40), Direccion.Sur ),
                                                                new Tuple<Vector2, Direccion> ( new Vector2(140,-40), Direccion.Sur ),
@@ -36,10 +37,12 @@ namespace SimulacionDeTraficoYSemaforos
                                                              };
         private List<Tuple<Semaforo, Sincronizacion>> semaforos;
 
-        public ControladorDeVehiculos(Texture2D[] texturas, List<Tuple<Semaforo, Sincronizacion>> semaforos) :
+        public ControladorDeVehiculos(Texture2D[] texturas, List<Tuple<Semaforo, Sincronizacion>> semaforos, Rectangle limites) :
             base(texturas)
         {
             this.semaforos = semaforos;
+            this.limites = limites;
+            this.limites.Inflate(60,50);
         }
 
 
@@ -52,18 +55,21 @@ namespace SimulacionDeTraficoYSemaforos
 
         public override void Update(GameTime gametime)
         {
+
             foreach (var vehiculo in vehiculos)
             {
-                vehiculo.Update(gametime);
+                vehiculo.Moverse();
+                vehiculo.Arrancar();
             }
 
-            //for (int i = 0; i < vehiculos.Count; i++)
-            //{
-            //    //if (!bounds.Contains(vehiculos[i].BoundingBox))
-            //    //{
-            //    //    vehiculos.Remove(vehiculos[i]);
-            //    //}
-            //}
+
+            for (int i = 0; i < vehiculos.Count; i++)
+            {
+                if (!limites.Contains(vehiculos[i].BoundingBox))
+                {
+                    vehiculos.Remove(vehiculos[i]);
+                }
+            }
             
 
             tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
@@ -74,22 +80,29 @@ namespace SimulacionDeTraficoYSemaforos
                 tiempoDeGeneracionRandom = 0;
             }
 
-            CheckCollisions();
 
+            DterminarInterraciones();
 
             foreach (var vehiculo in vehiculos)
             {
                 
-                vehiculo.Arrancar();               
+
+                vehiculo.Update(gametime);
+                
             }
+
+            //CheckCollisions();
+            
+
+            
 
             base.Update(gametime);
         }
 
         private void CheckCollisions()
         {
-            CheckCrash();
-            CheckInterseccion();
+            //CheckCrash();
+            //CheckInterseccion();
         }
 
         private void CrearVehiculos(int cantidad)
@@ -144,18 +157,87 @@ namespace SimulacionDeTraficoYSemaforos
         }
         
 
-        private void CheckInterseccion()
+        private void DterminarInterraciones()
         {
             for (int i = 0; i < vehiculos.Count; i++)
             {
                 foreach (var semaforo in semaforos)
                 {
-                    if (vehiculos[i].BoundingBox.Intersects(semaforo.Item1.BoundingBox))
+                    //if (vehiculos[i].BoundingBox.Intersects(semaforo.Item1.BoundingBox))
+                    //{
+                    //    vehiculos[i].Detenerse();
+                    //}
+                    Rectangle rect = new Rectangle(0,0,0,0);
+
+                    switch (vehiculos[i].Direccion)
                     {
-                        vehiculos[i].Detenerse();
-                    }                    
-                }                
+                        case Direccion.Norte:
+                            rect = new Rectangle(vehiculos[i].BoundingBox.Center.X, vehiculos[i].BoundingBox.Top, 1, 1);
+                            if (rect.Intersects(semaforo.Item1.BoundingBox))
+                            {
+                                vehiculos[i].Detenerse();
+                            }
+
+                            else
+                            {
+                                vehiculos[i].Arrancar();
+                            }
+                            break;
+                        case Direccion.Sur:
+                            rect = new Rectangle(vehiculos[i].BoundingBox.Center.X, vehiculos[i].BoundingBox.Bottom, 1, 1);
+                            if (rect.Intersects(semaforo.Item1.BoundingBox))
+                            {
+                                vehiculos[i].Detenerse();
+                            }
+
+                            else
+                            {
+                                vehiculos[i].Arrancar();
+                            }
+                            break;
+                        case Direccion.Este:
+                            rect = new Rectangle(vehiculos[i].BoundingBox.Right, vehiculos[i].BoundingBox.Center.Y, 1, 1);
+                            if (rect.Intersects(semaforo.Item1.BoundingBox))
+                            {
+                                vehiculos[i].Detenerse();
+                            }
+
+                            else
+                            {
+                                vehiculos[i].Arrancar();
+                            }
+                            break;
+                        case Direccion.Oeste:
+                            rect = new Rectangle(vehiculos[i].BoundingBox.Left, vehiculos[i].BoundingBox.Center.Y, 1, 1);
+                            if (rect.Intersects(semaforo.Item1.BoundingBox))
+                            {
+                                vehiculos[i].Detenerse();
+                            }
+
+                            else
+                            {
+                                vehiculos[i].Arrancar();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                //for (int j = 0; j < vehiculos.Count; j++)
+                //{
+                //    if ((i != j) && vehiculos[i].BoundingBox.Intersects(vehiculos[j].BoundingBox))
+                //    {
+                //        vehiculos[i].Detenerse();
+                //    }
+
+                //    else
+                //    {
+                //        vehiculos[i].Arrancar();
+                //    }
+                //}
             }
+
             
         }
 
@@ -186,6 +268,17 @@ namespace SimulacionDeTraficoYSemaforos
             {
                 vehiculo.Draw(spriteBatch);
             }
+        }
+
+        internal void Draw(SpriteBatch spriteBatch, Game1 game1)
+        {
+            foreach (var vehiculo in vehiculos)
+            {
+                vehiculo.Draw(spriteBatch);
+                //game1.DrawRectangle(vehiculo.BoundingBox, Color.Fuchsia);
+            }
+
+
         }
     }
 }

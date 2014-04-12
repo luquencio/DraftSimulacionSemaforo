@@ -46,6 +46,7 @@ namespace SimulacionDeTraficoYSemaforos
                     Monitor.Wait(_lock);
                 }
 
+
                 return estado;
             }
         }
@@ -78,6 +79,9 @@ namespace SimulacionDeTraficoYSemaforos
         {
             estado = Estado.Amarillo;
             textura = texturas[1];
+
+            dimensionXDeBarrera = (int)barrera.X;
+            dimensionYDeBarrera = (int)barrera.Y;
         }
 
         internal void CambiarARojo()

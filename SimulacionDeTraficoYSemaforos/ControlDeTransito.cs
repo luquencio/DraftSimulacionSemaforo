@@ -11,9 +11,9 @@ namespace SimulacionDeTraficoYSemaforos
     class ControlDeTransito
     {
         ControladorDeVehiculos controladorDeVehiculos;
-        ControladorDeSemaforos controladorDeSemaforos; 
+        ControladorDeSemaforos controladorDeSemaforos;
 
-        public ControlDeTransito(ContentManager Content)
+        public ControlDeTransito(ContentManager Content, Rectangle rectangle)
         {
             Texture2D[] texturasDeCarros = { Content.Load<Texture2D>("CamionetaPeq"),
                                              Content.Load<Texture2D>("CarroAzulPeq"),
@@ -27,8 +27,7 @@ namespace SimulacionDeTraficoYSemaforos
                                              };
 
             controladorDeSemaforos = new ControladorDeSemaforos(texturasDeSemaforos);
-            controladorDeVehiculos = new ControladorDeVehiculos(texturasDeCarros, controladorDeSemaforos.Semaforos);
-                     
+            controladorDeVehiculos = new ControladorDeVehiculos(texturasDeCarros, controladorDeSemaforos.Semaforos, rectangle);
         }
 
         public void Update(GameTime gameTime)
@@ -45,7 +44,9 @@ namespace SimulacionDeTraficoYSemaforos
 
         internal void Draw(SpriteBatch spriteBatch, Game1 game1)
         {
+            controladorDeVehiculos.Draw(spriteBatch, game1);
             controladorDeSemaforos.Draw(spriteBatch, game1);
+            
         }
     }
 }

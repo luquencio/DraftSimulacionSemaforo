@@ -21,7 +21,7 @@ namespace SimulacionDeTraficoYSemaforos
         bool cambieEstado;
 
         private Vector2[] vectoresBarreraNorteSur = { new Vector2(115, 193),
-                                                      new Vector2(378,193),
+                                                      new Vector2(365,193),
                                                      
                                                       new Vector2(651,276),
                                                       new Vector2(401,276),
@@ -56,7 +56,7 @@ namespace SimulacionDeTraficoYSemaforos
 
             foreach (var semaforo in vectoresBarreraEsteOeste)
 	        {
-                Semaforo semaforoTemporal = new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle((int)semaforo.X + 15, (int)semaforo.Y, 1, 31));
+                Semaforo semaforoTemporal = new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y, 1, 31));
 
                 semaforos.Add(new Tuple<Semaforo, Sincronizacion>(semaforoTemporal, Sincronizacion.EsteOeste));
 	        }
@@ -141,7 +141,7 @@ namespace SimulacionDeTraficoYSemaforos
             foreach (var semaforo in Semaforos)
             {
                 semaforo.Item1.Draw(spriteBatch);
-                game1.DrawRectangle(semaforo.Item1.BoundingBox,Color.Fuchsia);
+                //game1.DrawRectangle(semaforo.Item1.BoundingBox, Color.Fuchsia);
             }
         }
     }
