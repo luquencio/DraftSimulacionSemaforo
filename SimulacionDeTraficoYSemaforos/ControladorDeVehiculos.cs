@@ -45,24 +45,53 @@ namespace SimulacionDeTraficoYSemaforos
             this.limites.Inflate(60,50);
         }
 
-
-        //private void CrearVehiculo()
-        //{
-        //    var posicion = PosicionAletorea();
-        //    var vehiculo = new Vehiculo();
-        //    vehiculos.Add();
-        //}
-
         public override void Update(GameTime gametime)
         {
+            IniciarYContinuarMovimiento();
 
+
+            RemoverVehiculosFueraDeRango();
+
+
+            GenerarVehiculosSegunTiempoTranscurrido(gametime);
+
+            DeterminarInterraciones();
+
+            AnimarVehiculos(gametime);        
+
+            base.Update(gametime);
+        }        
+
+        private void IniciarYContinuarMovimiento()
+        {
             foreach (var vehiculo in vehiculos)
             {
                 vehiculo.Moverse();
                 vehiculo.Arrancar();
             }
+        }
 
+        private void AnimarVehiculos(GameTime gametime)
+        {
+            foreach (var vehiculo in vehiculos)
+            {
+                vehiculo.Update(gametime);
+            }
+        }
 
+        private void GenerarVehiculosSegunTiempoTranscurrido(GameTime gametime)
+        {
+            tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
+
+            if (tiempoDeGeneracionRandom > 4f)
+            {
+                CrearVehiculos(rand.Next(vectoresOrigen.Length));
+                tiempoDeGeneracionRandom = 0;
+            }
+        }
+
+        private void RemoverVehiculosFueraDeRango()
+        {
             for (int i = 0; i < vehiculos.Count; i++)
             {
                 if (!limites.Contains(vehiculos[i].BoundingBox))
@@ -70,39 +99,6 @@ namespace SimulacionDeTraficoYSemaforos
                     vehiculos.Remove(vehiculos[i]);
                 }
             }
-            
-
-            tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
-
-            if (tiempoDeGeneracionRandom > 2f)
-            {
-                CrearVehiculos(rand.Next(vectoresOrigen.Length));
-                tiempoDeGeneracionRandom = 0;
-            }
-
-
-            DterminarInterraciones();
-
-            foreach (var vehiculo in vehiculos)
-            {
-                
-
-                vehiculo.Update(gametime);
-                
-            }
-
-            //CheckCollisions();
-            
-
-            
-
-            base.Update(gametime);
-        }
-
-        private void CheckCollisions()
-        {
-            //CheckCrash();
-            //CheckInterseccion();
         }
 
         private void CrearVehiculos(int cantidad)
@@ -114,6 +110,7 @@ namespace SimulacionDeTraficoYSemaforos
                 int texturaRandom = rand.Next(TexturasDisponibles);
                 int posicionRandom = rand.Next(vectoresOrigen.Length);
 
+                // si la posicion se repite generar nuevo numero sin crear vehiculo
                 if (posicionesGeneradas.Contains(posicionRandom))
                 {
                     vehiculo--;
@@ -130,131 +127,118 @@ namespace SimulacionDeTraficoYSemaforos
 
         private Semaforo AsignarSemaforo(Direccion direccion)
         {
-            Semaforo semaf = null;
+            Semaforo semaforoAsignado = null;
 
             foreach (var semaforo in semaforos)
             {
                 if ((direccion == Direccion.Norte || direccion == Direccion.Sur) && (semaforo.Item2 == Sincronizacion.NorteSur))
                 {
-                    semaf = semaforo.Item1;
+                    semaforoAsignado = semaforo.Item1;
                     break;
                 }
 
                 if ((direccion == Direccion.Este || direccion == Direccion.Oeste) && (semaforo.Item2 == Sincronizacion.EsteOeste))
                 {
-                    semaf = semaforo.Item1;
+                    semaforoAsignado = semaforo.Item1;
                     break;
                 }
 
             }
 
-            if (semaf == null)
+            if (semaforoAsignado == null)
             {
-                throw (new Exception("Se cayo"));
+                throw (new Exception("Error en asignacion de semaforos"));
             }
 
-            return semaf;
+            return semaforoAsignado;
         }
         
 
-        private void DterminarInterraciones()
+        private void DeterminarInterraciones()
         {
-            for (int i = 0; i < vehiculos.Count; i++)
+            for (int carro = 0; carro < vehiculos.Count; carro++)
             {
+                ChequearInterracionConCarros(carro);
+
                 foreach (var semaforo in semaforos)
                 {
-                    //if (vehiculos[i].BoundingBox.Intersects(semaforo.Item1.BoundingBox))
-                    //{
-                    //    vehiculos[i].Detenerse();
-                    //}
-                    Rectangle rect = new Rectangle(0,0,0,0);
-
-                    switch (vehiculos[i].Direccion)
-                    {
-                        case Direccion.Norte:
-                            rect = new Rectangle(vehiculos[i].BoundingBox.Center.X, vehiculos[i].BoundingBox.Top, 1, 1);
-                            if (rect.Intersects(semaforo.Item1.BoundingBox))
-                            {
-                                vehiculos[i].Detenerse();
-                            }
-
-                            else
-                            {
-                                vehiculos[i].Arrancar();
-                            }
-                            break;
-                        case Direccion.Sur:
-                            rect = new Rectangle(vehiculos[i].BoundingBox.Center.X, vehiculos[i].BoundingBox.Bottom, 1, 1);
-                            if (rect.Intersects(semaforo.Item1.BoundingBox))
-                            {
-                                vehiculos[i].Detenerse();
-                            }
-
-                            else
-                            {
-                                vehiculos[i].Arrancar();
-                            }
-                            break;
-                        case Direccion.Este:
-                            rect = new Rectangle(vehiculos[i].BoundingBox.Right, vehiculos[i].BoundingBox.Center.Y, 1, 1);
-                            if (rect.Intersects(semaforo.Item1.BoundingBox))
-                            {
-                                vehiculos[i].Detenerse();
-                            }
-
-                            else
-                            {
-                                vehiculos[i].Arrancar();
-                            }
-                            break;
-                        case Direccion.Oeste:
-                            rect = new Rectangle(vehiculos[i].BoundingBox.Left, vehiculos[i].BoundingBox.Center.Y, 1, 1);
-                            if (rect.Intersects(semaforo.Item1.BoundingBox))
-                            {
-                                vehiculos[i].Detenerse();
-                            }
-
-                            else
-                            {
-                                vehiculos[i].Arrancar();
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                    ChequearInterraciones(carro, semaforo);
                 }
 
-                //for (int j = 0; j < vehiculos.Count; j++)
-                //{
-                //    if ((i != j) && vehiculos[i].BoundingBox.Intersects(vehiculos[j].BoundingBox))
-                //    {
-                //        vehiculos[i].Detenerse();
-                //    }
-
-                //    else
-                //    {
-                //        vehiculos[i].Arrancar();
-                //    }
-                //}
+                
             }
 
             
         }
 
-        private void CheckCrash()
-        {          
+        private void ChequearInterraciones(int carro, Tuple<Semaforo, Sincronizacion> semaforo)
+        {
+            Rectangle LimiteFrontalDeVehiculo = new Rectangle(0, 0, 0, 0);
 
-            for (int i = 0; i < vehiculos.Count; i++)
+            switch (vehiculos[carro].Direccion)
             {
-                for (int j = 0; j < vehiculos.Count; j++)
-                {
-                    if ((i != j) && vehiculos[i].BoundingBox.Intersects(vehiculos[j].BoundingBox))
-                    {
-                        vehiculos[i].Detenerse();
-                    }
-                }
+                case Direccion.Norte:
+                    LimiteFrontalDeVehiculo = DeterminarSiPasarInterseccion(carro,vehiculos[carro].BoundingBox.Center.X, 
+                                                                            vehiculos[carro].BoundingBox.Top, semaforo, 
+                                                                            LimiteFrontalDeVehiculo);
+                    break;
+                case Direccion.Sur:
+                    LimiteFrontalDeVehiculo = DeterminarSiPasarInterseccion(carro, vehiculos[carro].BoundingBox.Center.X,
+                                                                            vehiculos[carro].BoundingBox.Bottom, semaforo,
+                                                                            LimiteFrontalDeVehiculo);
+                    break;
+                case Direccion.Este:
+                    
+                    LimiteFrontalDeVehiculo = DeterminarSiPasarInterseccion(carro, vehiculos[carro].BoundingBox.Right, 
+                                                                            vehiculos[carro].BoundingBox.Center.Y, semaforo,
+                                                                            LimiteFrontalDeVehiculo);
+                    break;
+                case Direccion.Oeste:
+                    LimiteFrontalDeVehiculo = DeterminarSiPasarInterseccion(carro, vehiculos[carro].BoundingBox.Left,
+                                                                            vehiculos[carro].BoundingBox.Center.Y, semaforo,
+                                                                            LimiteFrontalDeVehiculo);
+                    break;
+                default:
+                    break;
             }
         }
+
+        /*
+         * Las coordenadas A y B sirven para determinar las coordenadas del centro y la parte frontal del vehiculo
+         * Si el carro esta en direccion Norte o Sur la CoordenadaA es el centro y la CoordenadaB es la parte frontal
+         * Si el carro esta en direccion Este u Oeste la CoordenadaB es el centro y la CoordenadaA es la parte frontal
+         */
+        private Rectangle DeterminarSiPasarInterseccion(int carro, int CoordenadaA, int CoordenadaB, 
+                                                        Tuple<Semaforo, Sincronizacion> semaforo, Rectangle LimiteFrontalDeVehiculo)
+        {
+            LimiteFrontalDeVehiculo = new Rectangle(CoordenadaA,CoordenadaB , 1, 1);
+            if (LimiteFrontalDeVehiculo.Intersects(semaforo.Item1.BoundingBox))
+            {
+                vehiculos[carro].Detenerse();
+            }
+
+            else
+            {
+                vehiculos[carro].Arrancar();
+            }
+            return LimiteFrontalDeVehiculo;
+        }
+
+        private void ChequearInterracionConCarros(int carro)
+        {
+            for (int otroCarro = 0; otroCarro < vehiculos.Count; otroCarro++)
+            {
+                if ((carro != otroCarro) && vehiculos[carro].BoundingBox.Intersects(vehiculos[otroCarro].BoundingBox))
+                {
+                    vehiculos[carro].Detenerse();
+                }
+
+                else
+                {
+                    vehiculos[carro].Arrancar();
+                }
+            }
+        } 
         
 
         private float RotarAlNorte { get { return MathHelper.TwoPi; } }
@@ -270,7 +254,7 @@ namespace SimulacionDeTraficoYSemaforos
             }
         }
 
-        internal void Draw(SpriteBatch spriteBatch, Game1 game1)
+        public void Draw(SpriteBatch spriteBatch, Game1 game1)
         {
             foreach (var vehiculo in vehiculos)
             {

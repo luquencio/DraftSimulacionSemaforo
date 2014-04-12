@@ -17,7 +17,7 @@ namespace SimulacionDeTraficoYSemaforos
         Direccion direccion;
         Rectangle dimensiones;
         Semaforo semaforo;
-        bool estoyDisponible = true;
+        bool viSemaforo = true;
 
         public Vehiculo(Texture2D textura, Vector2 posicion, Direccion direccion, Semaforo semaforo) :
             base(textura, posicion)

@@ -36,7 +36,7 @@ namespace SimulacionDeTraficoYSemaforos
         }      
 
 
-        public Estado LeerEstado()
+        public Estado EsperarSemaforo()
         {
             // parte critical
             lock (_lock)
