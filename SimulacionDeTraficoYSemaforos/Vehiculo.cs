@@ -5,19 +5,20 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
 
 namespace SimulacionDeTraficoYSemaforos
 {
     public class Vehiculo : Sprite
     {
-        private const float VELOCIDAD = 0.5f;
+        private const float VELOCIDAD = 0.8f;
         private Vector2 velocidad;
         private Vector2 centroDeRotacion;
         private float anguloDeRotacion;
         Direccion direccion;
         Rectangle dimensiones;
         Semaforo semaforo;
-        bool viSemaforo = true;
+        public bool viSemaforo = true;
 
         public Vehiculo(Texture2D textura, Vector2 posicion, Direccion direccion, Semaforo semaforo) :
             base(textura, posicion)
@@ -125,14 +126,7 @@ namespace SimulacionDeTraficoYSemaforos
 
         public override void Update(GameTime gametime)
         {
-            posicion += velocidad;
-
-            //if (estoyDisponible == true)
-            //{
-                
-            //}
-
-            
+            posicion += velocidad;           
 
             base.Update(gametime);
         }
@@ -143,6 +137,12 @@ namespace SimulacionDeTraficoYSemaforos
 
             velocidad.X = 0f;
             velocidad.Y = 0f;
+
+            viSemaforo = false;
+
+            //Thread VerSemaforo = new Thread(semaforo.EsperarSemaforo);
+            //VerSemaforo.Start(this);
+            
         }
 
         protected override Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
@@ -158,9 +158,10 @@ namespace SimulacionDeTraficoYSemaforos
 
         public void Arrancar()
         {
-            if (semaforo.Estado == Estado.Verde)
-            {
+            //semaforo.EsperarSemaforo(this);
 
+            if (semaforo.Estado != Estado.Rojo)
+            {
                 velocidad = DeterminarDireccionDeVelocidad(direccion);
             }        
         }

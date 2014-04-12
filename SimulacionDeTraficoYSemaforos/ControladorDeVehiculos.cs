@@ -172,7 +172,7 @@ namespace SimulacionDeTraficoYSemaforos
             
         }
 
-        private void ChequearInterraciones(int carro, Tuple<Semaforo, Sincronizacion> semaforo)
+        private void ChequearInterraciones(int carro, Tuple<Semaforo, Sincronizacion> semaforo) 
         {
             Rectangle LimiteFrontalDeVehiculo = new Rectangle(0, 0, 0, 0);
 

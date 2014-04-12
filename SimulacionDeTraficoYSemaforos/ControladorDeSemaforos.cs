@@ -50,13 +50,13 @@ namespace SimulacionDeTraficoYSemaforos
             foreach (var semaforo in vectoresBarreraNorteSur)
             {
                 // arreglar esto
-                Semaforo semaforoTemporal = new Semaforo(Texturas[0], semaforo, Estado.Rojo, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y, 31, 1));
+                Semaforo semaforoTemporal = new Semaforo(Texturas[3], semaforo, Estado.Rojo, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y, 31, 1), Sincronizacion.NorteSur);
                 semaforos.Add(new Tuple<Semaforo, Sincronizacion> (semaforoTemporal, Sincronizacion.NorteSur ));
             }
 
             foreach (var semaforo in vectoresBarreraEsteOeste)
 	        {
-                Semaforo semaforoTemporal = new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y, 1, 31));
+                Semaforo semaforoTemporal = new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y, 1, 31), Sincronizacion.EsteOeste);
 
                 semaforos.Add(new Tuple<Semaforo, Sincronizacion>(semaforoTemporal, Sincronizacion.EsteOeste));
 	        }
@@ -141,9 +141,7 @@ namespace SimulacionDeTraficoYSemaforos
 
 
 
-
-
-        private void Draw(SpriteBatch spriteBatch, Game1 game1)
+        public void Draw(SpriteBatch spriteBatch, Game1 game1)
         {
             foreach (var semaforo in Semaforos)
             {

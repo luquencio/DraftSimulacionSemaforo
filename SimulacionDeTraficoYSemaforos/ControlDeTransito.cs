@@ -23,7 +23,10 @@ namespace SimulacionDeTraficoYSemaforos
 
             Texture2D[] texturasDeSemaforos = { Content.Load<Texture2D>("SemaforoRojoPeq"), 
                                                Content.Load<Texture2D>("SemaforoAmarilloPeq"),
-                                               Content.Load<Texture2D>("SemaforoVerdePeq")
+                                               Content.Load<Texture2D>("SemaforoVerdePeq"),
+                                               Content.Load<Texture2D>("SemaforoRojoPeqHor"), 
+                                               Content.Load<Texture2D>("SemaforoAmarilloPeqHor"),
+                                               Content.Load<Texture2D>("SemaforoVerdePeqHor")
                                              };
 
             controladorDeSemaforos = new ControladorDeSemaforos(texturasDeSemaforos);

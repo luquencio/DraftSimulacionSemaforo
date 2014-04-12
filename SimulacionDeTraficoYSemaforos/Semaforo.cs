@@ -23,9 +23,10 @@ namespace SimulacionDeTraficoYSemaforos
         private Texture2D[] texturas;
         private Rectangle barrera;
         private int dimensionXDeBarrera;
-        private int dimensionYDeBarrera; 
+        private int dimensionYDeBarrera;
+        private Sincronizacion sincronizacion;
 
-        public Semaforo(Texture2D textura, Vector2 posicion,Estado estado , Texture2D[] texturas, Rectangle barrera)
+        public Semaforo(Texture2D textura, Vector2 posicion, Estado estado, Texture2D[] texturas, Rectangle barrera, Sincronizacion sincronizacion)
             : base(textura, posicion)
         {
             this.texturas = texturas;
@@ -33,7 +34,8 @@ namespace SimulacionDeTraficoYSemaforos
             this.barrera = barrera;
             dimensionXDeBarrera = (int)barrera.X;
             dimensionYDeBarrera = (int)barrera.Y;
-        }      
+            this.sincronizacion = sincronizacion;
+        }           
 
 
         public Estado EsperarSemaforo()
@@ -65,8 +67,19 @@ namespace SimulacionDeTraficoYSemaforos
 
         internal void CambiarAVerde()
         {
+            if (sincronizacion == Sincronizacion.NorteSur)
+            {
+
+                textura = texturas[5];
+                
+            }
+
+            else
+            {
+                textura = texturas[2];
+            }
             estado = Estado.Verde;
-            textura = texturas[2];
+            
 
             dimensionXDeBarrera = 1;
             dimensionYDeBarrera = 1;
@@ -77,17 +90,39 @@ namespace SimulacionDeTraficoYSemaforos
 
         internal void CambiarAAmarillo()
         {
-            estado = Estado.Amarillo;
-            textura = texturas[1];
+            if (sincronizacion == Sincronizacion.NorteSur)
+            {
+                textura = texturas[4];
 
+            }
+
+            else
+            {
+                
+                textura = texturas[1];
+            }
+
+            estado = Estado.Amarillo;
             dimensionXDeBarrera = (int)barrera.X;
             dimensionYDeBarrera = (int)barrera.Y;
         }
 
         internal void CambiarARojo()
         {
+            if (sincronizacion == Sincronizacion.NorteSur)
+            {
+
+                textura = texturas[3];
+
+            }
+
+            else
+            {
+                
+                textura = texturas[0];
+            }
+
             estado = Estado.Rojo;
-            textura = texturas[0];
 
             dimensionXDeBarrera = (int)barrera.X;
             dimensionYDeBarrera = (int)barrera.Y;
