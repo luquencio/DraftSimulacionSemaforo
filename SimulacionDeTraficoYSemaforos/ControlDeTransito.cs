@@ -42,5 +42,10 @@ namespace SimulacionDeTraficoYSemaforos
             controladorDeVehiculos.Draw(spriteBatch);
             controladorDeSemaforos.Draw(spriteBatch);
         }
+
+        internal void Draw(SpriteBatch spriteBatch, Game1 game1)
+        {
+            controladorDeSemaforos.Draw(spriteBatch, game1);
+        }
     }
 }

@@ -12,13 +12,11 @@ namespace SimulacionDeTraficoYSemaforos
     {
         protected Texture2D textura;
         protected Vector2 posicion;
-        private Rectangle dimensiones;
 
-        public Sprite(Texture2D textura, Vector2 posicion, Rectangle dimensiones)
+        public Sprite(Texture2D textura, Vector2 posicion)
         {
             this.textura = textura;
             this.posicion = posicion;
-            this.dimensiones = dimensiones;
 
             // (Velocity*(float) gameTime.ElapsedGameTime.TotalSeconds);
         }
@@ -33,19 +31,7 @@ namespace SimulacionDeTraficoYSemaforos
 
         }
 
-        //private bool Blocked(Vector2 newPosition)
-        //{
-        //    var boundingBox = CreateBoundingBoxFromPosition(newPosition);
-        //    return !movementBounds.Contains(boundingBox);
-        //}
-
-//        x1 =(width * math.abs(math.cos(angle) + height * math.abs(math.sin(angle))*-.5
-//x2 =(width * math.abs(math.cos(angle) + height * math.abs(math.sin(angle))*.5
-//y1 =(width * math.abs(math.sin(angle) + height * math.abs(math.cos(angle))*-.5
-//y2 =(width * math.abs(math.sin(angle) + height * math.abs(math.cos(angle))*.5
-
-//width = x2-x1;
-//height = y2-y1;
+        
 
         protected virtual Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
         {
@@ -55,8 +41,7 @@ namespace SimulacionDeTraficoYSemaforos
 
         protected Vector2 Posicion { get { return posicion; } }
         protected float Width { get { return textura.Width; } }
-        protected float Height { get { return textura.Height; } }
-        protected Rectangle Dimensiones { get { return dimensiones; } }
+        protected float Height { get { return textura.Height; } }        
 
         public Rectangle BoundingBox
         {

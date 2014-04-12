@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
 
 namespace SimulacionDeTraficoYSemaforos
 {
@@ -20,7 +21,6 @@ namespace SimulacionDeTraficoYSemaforos
     {
         private List<Vehiculo> vehiculos = new List<Vehiculo>();
         Random rand = new Random();
-        private const float VELOCIDAD = 0.5f;
         private float tiempoDeGeneracionRandom = 0f;
 
         private Tuple<Vector2, Direccion>[] vectoresOrigen = { new Tuple<Vector2, Direccion> ( new Vector2(121,-40), Direccion.Sur ),
@@ -34,13 +34,12 @@ namespace SimulacionDeTraficoYSemaforos
                                                                new Tuple<Vector2, Direccion> ( new Vector2(-45,266), Direccion.Este ),
                                                                new Tuple<Vector2, Direccion> ( new Vector2(-45,246), Direccion.Este )
                                                              };
-        private Texture2D[] texturasDeCarros;
-        private List<Semaforo> list;
+        private List<Tuple<Semaforo, Sincronizacion>> semaforos;
 
-        public ControladorDeVehiculos(Texture2D[] texturas, List<Semaforo> list) :
+        public ControladorDeVehiculos(Texture2D[] texturas, List<Tuple<Semaforo, Sincronizacion>> semaforos) :
             base(texturas)
         {
-            this.list = list;
+            this.semaforos = semaforos;
         }
 
 
@@ -77,7 +76,20 @@ namespace SimulacionDeTraficoYSemaforos
 
             CheckCollisions();
 
+
+            foreach (var vehiculo in vehiculos)
+            {
+                
+                vehiculo.Arrancar();               
+            }
+
             base.Update(gametime);
+        }
+
+        private void CheckCollisions()
+        {
+            CheckCrash();
+            CheckInterseccion();
         }
 
         private void CrearVehiculos(int cantidad)
@@ -98,108 +110,47 @@ namespace SimulacionDeTraficoYSemaforos
                 posicionesGeneradas.Add(posicionRandom);
                 Direccion direccion = vectoresOrigen[posicionRandom].Item2;
 
-                vehiculos.Add(new Vehiculo(Texturas[texturaRandom], vectoresOrigen[posicionRandom].Item1,
-                              DeterminarCentroDeRotacion(texturaRandom), DeterminarAnguloDeRotacion(direccion),
-                              DeterminarDireccionDeVelocidad(direccion),Dimensiones(direccion)));
+                vehiculos.Add(new Vehiculo(Texturas[texturaRandom], vectoresOrigen[posicionRandom].Item1, direccion, AsignarSemaforo(direccion)));
                 
             }
         }
 
-        private Vector2 DeterminarDireccionDeVelocidad(Direccion direccion)
+        private Semaforo AsignarSemaforo(Direccion direccion)
         {
-            Vector2 velocidad = new Vector2(0, 0);
+            Semaforo semaf = null;
 
-            switch (direccion)
+            foreach (var semaforo in semaforos)
             {
-                case Direccion.Norte:
-                    velocidad.X = 0f;
-                    velocidad.Y = -VELOCIDAD;
+                if ((direccion == Direccion.Norte || direccion == Direccion.Sur) && (semaforo.Item2 == Sincronizacion.NorteSur))
+                {
+                    semaf = semaforo.Item1;
                     break;
-                case Direccion.Sur:
-                    velocidad.X = 0f;
-                    velocidad.Y = VELOCIDAD;
+                }
+
+                if ((direccion == Direccion.Este || direccion == Direccion.Oeste) && (semaforo.Item2 == Sincronizacion.EsteOeste))
+                {
+                    semaf = semaforo.Item1;
                     break;
-                case Direccion.Este:
-                    velocidad.X = VELOCIDAD;
-                    velocidad.Y = 0f;
-                    break;
-                case Direccion.Oeste:
-                    velocidad.X = -VELOCIDAD;
-                    velocidad.Y = 0f;
-                    break;
-                default:
-                    break;
+                }
+
             }
 
-            return velocidad;
-        }
-
-        private Rectangle Dimensiones(Direccion direccion) 
-        {
-
-            Rectangle dimensiones = new Rectangle(0, 0, 0, 0);
-
-            if (direccion == Direccion.Norte || direccion == Direccion.Sur)
+            if (semaf == null)
             {
-                dimensiones.Width = 11;
-                dimensiones.Height = 26;
-            }
-            else
-            {
-                dimensiones.Width = 26;
-                dimensiones.Height = 11;
+                throw (new Exception("Se cayo"));
             }
 
-            return dimensiones;
+            return semaf;
         }
-            
-        private float DeterminarAnguloDeRotacion(Direccion direccion)
-        {
-            float angulo = 0f;
-
-            switch (direccion)
-            {
-                case Direccion.Norte:
-                    angulo = RotarAlNorte;
-                    break;
-                case Direccion.Sur:
-                    angulo = RotarAlSur;
-                    break;
-                case Direccion.Este:
-                    angulo = RotarAlEste;
-                    break;
-                case Direccion.Oeste:
-                    angulo = RotarAlOeste;
-                    break;
-                default:
-                    break;
-            }
-
-            return angulo;
-        }
-
-        private Vector2 DeterminarCentroDeRotacion(int texturaRandom)
-        {
-            Vector2 centroDePosicion;
-            centroDePosicion.X = Texturas[texturaRandom].Width / 2;
-            centroDePosicion.Y = Texturas[texturaRandom].Height / 2;
-            return centroDePosicion;
-        }
-
-        private void CheckCollisions()
-        {
-            CheckCrash();
-            CheckInterseccion();
-        }
+        
 
         private void CheckInterseccion()
         {
-
             for (int i = 0; i < vehiculos.Count; i++)
             {
-                foreach (var semaforo in list)
+                foreach (var semaforo in semaforos)
                 {
-                    if (vehiculos[i].BoundingBox.Intersects(semaforo.BoundingBox))
+                    if (vehiculos[i].BoundingBox.Intersects(semaforo.Item1.BoundingBox))
                     {
                         vehiculos[i].Detenerse();
                     }                    
@@ -222,6 +173,7 @@ namespace SimulacionDeTraficoYSemaforos
                 }
             }
         }
+        
 
         private float RotarAlNorte { get { return MathHelper.TwoPi; } }
         private float RotarAlSur { get { return MathHelper.Pi; } }

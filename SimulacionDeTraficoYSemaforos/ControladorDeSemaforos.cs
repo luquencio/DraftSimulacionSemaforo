@@ -8,10 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SimulacionDeTraficoYSemaforos
 {
+    public enum Sincronizacion
+    {
+        NorteSur,
+        EsteOeste
+    }
+
     class ControladorDeSemaforos : Controlador
     {
-        List<Semaforo> SemaforosNorteSur = new List<Semaforo>();
-        List<Semaforo> SemaforosEsteOeste = new List<Semaforo>();
+        List<Tuple<Semaforo, Sincronizacion>> semaforos = new List<Tuple<Semaforo, Sincronizacion>>();
         private float tiempoDeGeneracionRandom = 0f;
         bool cambieEstado;
 
@@ -45,12 +50,15 @@ namespace SimulacionDeTraficoYSemaforos
             foreach (var semaforo in vectoresBarreraNorteSur)
             {
                 // arreglar esto
-                SemaforosNorteSur.Add(new Semaforo(Texturas[0], semaforo, Estado.Rojo, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y + 15, 31, 1)));
+                Semaforo semaforoTemporal = new Semaforo(Texturas[0], semaforo, Estado.Rojo, Texturas, new Rectangle((int)semaforo.X, (int)semaforo.Y, 31, 1));
+                semaforos.Add(new Tuple<Semaforo, Sincronizacion> (semaforoTemporal, Sincronizacion.NorteSur ));
             }
 
             foreach (var semaforo in vectoresBarreraEsteOeste)
 	        {
-                SemaforosEsteOeste.Add(new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle((int)semaforo.X + 15, (int)semaforo.Y, 1, 31)));
+                Semaforo semaforoTemporal = new Semaforo(Texturas[2], semaforo, Estado.Verde, Texturas, new Rectangle((int)semaforo.X + 15, (int)semaforo.Y, 1, 31));
+
+                semaforos.Add(new Tuple<Semaforo, Sincronizacion>(semaforoTemporal, Sincronizacion.EsteOeste));
 	        }
         }
 
@@ -62,21 +70,11 @@ namespace SimulacionDeTraficoYSemaforos
 
             if (tiempoDeGeneracionRandom > 4f && cambieEstado == false)
             {
-                foreach (var semaforo in SemaforosNorteSur)
+                foreach (var semaforo in semaforos)
                 {
-
-                    if (semaforo.Estado == Estado.Verde)
+                    if (semaforo.Item1.Estado == Estado.Verde)
                     {
-                        semaforo.CambiarAAmarillo();
-                    }
-
-                }
-
-                foreach (var semaforo in SemaforosEsteOeste)
-                {
-                    if (semaforo.Estado == Estado.Verde)
-                    {
-                        semaforo.CambiarAAmarillo();
+                        semaforo.Item1.CambiarAAmarillo();
                     }
                 }
 
@@ -86,32 +84,18 @@ namespace SimulacionDeTraficoYSemaforos
 
             if (tiempoDeGeneracionRandom > 7f)
             {
-                foreach (var semaforo in SemaforosNorteSur)
+                foreach (var semaforo in semaforos)
                 {
-
-                    if (semaforo.Estado == Estado.Amarillo)
+                    if (semaforo.Item1.Estado == Estado.Amarillo)
                     {
-                        semaforo.CambiarARojo();
+                        semaforo.Item1.CambiarARojo();
                     }
 
-                    else if (semaforo.Estado == Estado.Rojo)
+                    else if (semaforo.Item1.Estado == Estado.Rojo)
                     {
-                        semaforo.CambiarAVerde();
+                        semaforo.Item1.CambiarAVerde();
                     }
 
-                }
-
-                foreach (var semaforo in SemaforosEsteOeste)
-                {
-                    if (semaforo.Estado == Estado.Amarillo)
-                    {
-                        semaforo.CambiarARojo();
-                    }
-
-                    else if (semaforo.Estado == Estado.Rojo)
-                    {
-                        semaforo.CambiarAVerde();
-                    }
                 }
 
                 cambieEstado = false;
@@ -125,31 +109,40 @@ namespace SimulacionDeTraficoYSemaforos
         {
             foreach (var semaforo in Semaforos)
             {
-                semaforo.Draw(spriteBatch);
+                semaforo.Item1.Draw(spriteBatch);
             }
         }
 
-        public List<Semaforo> Semaforos { get { return GenerarListaDeSemaforos(); } }
+        public List<Tuple<Semaforo, Sincronizacion>> Semaforos { get { return semaforos; } }
 
-        private List<Semaforo> GenerarListaDeSemaforos()
+        //private List<Semaforo> GenerarListaDeSemaforos()
+        //{
+        //    List<Semaforo> semaforos = new List<Semaforo>();
+
+        //    foreach (var semaforo in semaforosNorteSur)
+        //    {
+        //        semaforos.Add(semaforo);
+        //    }
+
+        //    foreach (var semaforo in semaforosEsteOeste)
+        //    {
+        //        semaforos.Add(semaforo);
+        //    }
+
+        //    return semaforos;
+        //}
+
+
+
+
+
+        internal void Draw(SpriteBatch spriteBatch, Game1 game1)
         {
-            List<Semaforo> semaforos = new List<Semaforo>();
-
-            foreach (var semaforo in SemaforosNorteSur)
+            foreach (var semaforo in Semaforos)
             {
-                semaforos.Add(semaforo);
+                semaforo.Item1.Draw(spriteBatch);
+                game1.DrawRectangle(semaforo.Item1.BoundingBox,Color.Fuchsia);
             }
-
-            foreach (var semaforo in SemaforosEsteOeste)
-            {
-                semaforos.Add(semaforo);
-            }
-
-            return semaforos;
         }
-
-
-
-
     }
 }

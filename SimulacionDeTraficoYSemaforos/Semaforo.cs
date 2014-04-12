@@ -20,18 +20,23 @@ namespace SimulacionDeTraficoYSemaforos
     {
         private Estado estado;
         private object _lock = new object();
-        private Rectangle barrera;
         private Texture2D[] texturas;
+        private Rectangle barrera;
+        private int dimensionXDeBarrera;
+        private int dimensionYDeBarrera; 
 
-        public Semaforo(Texture2D textura, Vector2 posicion,Estado estado , Texture2D[] texturas, Rectangle dimensiones)
-            : base(textura, posicion, dimensiones)
+        public Semaforo(Texture2D textura, Vector2 posicion,Estado estado , Texture2D[] texturas, Rectangle barrera)
+            : base(textura, posicion)
         {
             this.texturas = texturas;
             this.estado = estado;
+            this.barrera = barrera;
+            dimensionXDeBarrera = (int)barrera.X;
+            dimensionYDeBarrera = (int)barrera.Y;
         }      
 
 
-        private Estado LeerEstado()
+        public Estado LeerEstado()
         {
             // parte critical
             lock (_lock)
@@ -61,6 +66,12 @@ namespace SimulacionDeTraficoYSemaforos
         {
             estado = Estado.Verde;
             textura = texturas[2];
+
+            dimensionXDeBarrera = 1;
+            dimensionYDeBarrera = 1;
+
+            LiberarBarrera();
+            
         }
 
         internal void CambiarAAmarillo()
@@ -73,12 +84,17 @@ namespace SimulacionDeTraficoYSemaforos
         {
             estado = Estado.Rojo;
             textura = texturas[0];
+
+            dimensionXDeBarrera = (int)barrera.X;
+            dimensionYDeBarrera = (int)barrera.Y;
         }
 
         protected override Rectangle CreateBoundingBoxFromPosition(Vector2 posicion)
         {
-            return new Rectangle((int)Dimensiones.X, (int)Dimensiones.Y, Dimensiones.Width, Dimensiones.Height);
+            return new Rectangle(dimensionXDeBarrera, dimensionYDeBarrera, barrera.Width, barrera.Height);
         }
+
+        //protected Rectangle Dimensiones { get { return dimensiones; } }
 
         
     }

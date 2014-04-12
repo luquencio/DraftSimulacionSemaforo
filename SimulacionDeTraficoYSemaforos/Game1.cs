@@ -99,12 +99,22 @@ namespace SimulacionDeTraficoYSemaforos
 
             spriteBatch.Draw(fondo, Vector2.Zero, Color.White);
 
+
             controlDeTransito.Draw(spriteBatch);
+            //controlDeTransito.Draw(spriteBatch, this);
+            //DrawRectangle(new Rectangle(115, 193, 10, 3), Color.Fuchsia);
             
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void DrawRectangle(Rectangle coords, Color color)
+        {
+            var rect = new Texture2D(GraphicsDevice, 1, 1);
+            rect.SetData(new[] { color });
+            spriteBatch.Draw(rect, coords, color);
         }
     }
 }
