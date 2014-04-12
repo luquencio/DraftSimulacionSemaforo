@@ -17,8 +17,8 @@ namespace SimulacionDeTraficoYSemaforos
     class ControladorDeSemaforos : Controlador
     {
         List<Tuple<Semaforo, Sincronizacion>> semaforos = new List<Tuple<Semaforo, Sincronizacion>>();
-        private float tiempoDeGeneracionRandom = 0f;
-        bool cambieEstado;
+        private float tiempoDeCambioDeEstado = 0f;
+        bool cambioAAmarillo;
 
         private Vector2[] vectoresBarreraNorteSur = { new Vector2(115, 193),
                                                       new Vector2(365,193),
@@ -64,25 +64,18 @@ namespace SimulacionDeTraficoYSemaforos
 
         public override void Update(GameTime gametime)
         {
-            tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
+            tiempoDeCambioDeEstado += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            
+            CambiarDeVerdeAAmarillo();
 
-            if (tiempoDeGeneracionRandom > 4f && cambieEstado == false)
-            {
-                foreach (var semaforo in semaforos)
-                {
-                    if (semaforo.Item1.Estado == Estado.Verde)
-                    {
-                        semaforo.Item1.CambiarAAmarillo();
-                    }
-                }
+            CambiarRojoVerde();
 
-                cambieEstado = true;
-            }
+            base.Update(gametime);
+        }
 
-
-            if (tiempoDeGeneracionRandom > 7f)
+        private void CambiarRojoVerde()
+        {
+            if (tiempoDeCambioDeEstado > 7f)
             {
                 foreach (var semaforo in semaforos)
                 {
@@ -98,11 +91,25 @@ namespace SimulacionDeTraficoYSemaforos
 
                 }
 
-                cambieEstado = false;
-                tiempoDeGeneracionRandom = 0;
+                cambioAAmarillo = false;
+                tiempoDeCambioDeEstado = 0;
             }
+        }
 
-            base.Update(gametime);
+        private void CambiarDeVerdeAAmarillo()
+        {
+            if (tiempoDeCambioDeEstado > 4f && cambioAAmarillo == false)
+            {
+                foreach (var semaforo in semaforos)
+                {
+                    if (semaforo.Item1.Estado == Estado.Verde)
+                    {
+                        semaforo.Item1.CambiarAAmarillo();
+                    }
+                }
+
+                cambioAAmarillo = true;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -136,7 +143,7 @@ namespace SimulacionDeTraficoYSemaforos
 
 
 
-        internal void Draw(SpriteBatch spriteBatch, Game1 game1)
+        private void Draw(SpriteBatch spriteBatch, Game1 game1)
         {
             foreach (var semaforo in Semaforos)
             {

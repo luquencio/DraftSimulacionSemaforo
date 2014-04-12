@@ -20,8 +20,9 @@ namespace SimulacionDeTraficoYSemaforos
     public class ControladorDeVehiculos : Controlador
     {
         private List<Vehiculo> vehiculos = new List<Vehiculo>();
-        Random rand = new Random();
+        Random generadorDeNumerosRandom = new Random();
         private float tiempoDeGeneracionRandom = 0f;
+        private const float TIEMPOENTREGENERACIONRANDOM = 4f;
         Rectangle limites;
 
         private Tuple<Vector2, Direccion>[] vectoresOrigen = { new Tuple<Vector2, Direccion> ( new Vector2(121,-40), Direccion.Sur ),
@@ -71,6 +72,17 @@ namespace SimulacionDeTraficoYSemaforos
             }
         }
 
+        private void RemoverVehiculosFueraDeRango()
+        {
+            for (int i = 0; i < vehiculos.Count; i++)
+            {
+                if (!limites.Contains(vehiculos[i].BoundingBox))
+                {
+                    vehiculos.Remove(vehiculos[i]);
+                }
+            }
+        }
+
         private void AnimarVehiculos(GameTime gametime)
         {
             foreach (var vehiculo in vehiculos)
@@ -83,23 +95,12 @@ namespace SimulacionDeTraficoYSemaforos
         {
             tiempoDeGeneracionRandom += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-            if (tiempoDeGeneracionRandom > 4f)
+            if (tiempoDeGeneracionRandom > TIEMPOENTREGENERACIONRANDOM)
             {
-                CrearVehiculos(rand.Next(vectoresOrigen.Length));
+                CrearVehiculos(generadorDeNumerosRandom.Next(vectoresOrigen.Length));
                 tiempoDeGeneracionRandom = 0;
             }
-        }
-
-        private void RemoverVehiculosFueraDeRango()
-        {
-            for (int i = 0; i < vehiculos.Count; i++)
-            {
-                if (!limites.Contains(vehiculos[i].BoundingBox))
-                {
-                    vehiculos.Remove(vehiculos[i]);
-                }
-            }
-        }
+        }        
 
         private void CrearVehiculos(int cantidad)
         {
@@ -107,8 +108,8 @@ namespace SimulacionDeTraficoYSemaforos
 
             for (int vehiculo = 0; vehiculo < cantidad; vehiculo++)
             {
-                int texturaRandom = rand.Next(TexturasDisponibles);
-                int posicionRandom = rand.Next(vectoresOrigen.Length);
+                int texturaRandom = generadorDeNumerosRandom.Next(TexturasDisponibles);
+                int posicionRandom = generadorDeNumerosRandom.Next(vectoresOrigen.Length);
 
                 // si la posicion se repite generar nuevo numero sin crear vehiculo
                 if (posicionesGeneradas.Contains(posicionRandom))
