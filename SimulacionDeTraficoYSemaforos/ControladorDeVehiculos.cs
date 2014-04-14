@@ -22,7 +22,7 @@ namespace SimulacionDeTraficoYSemaforos
         private List<Vehiculo> vehiculos = new List<Vehiculo>();
         Random generadorDeNumerosRandom = new Random();
         private float tiempoDeGeneracionRandom = 0f;
-        private const float TIEMPOENTREGENERACIONRANDOM = 4f;
+        private const float TIEMPOENTREGENERACIONRANDOM = 2f;
         Rectangle limites;
 
         private Tuple<Vector2, Direccion>[] vectoresOrigen = { new Tuple<Vector2, Direccion> ( new Vector2(121,-40), Direccion.Sur ),
